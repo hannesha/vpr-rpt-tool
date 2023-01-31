@@ -14,7 +14,7 @@ signal_regex = re.compile('(\$.+)\.(.+)\[(\d+)\]')
 @lru_cache
 def find(root: ElementTree.Element, blockname: str):
 
-    for e in root.findall(f'.//block[@name=\'{blockname}\']'):
+    for e in root.iterfind(f'.//block[@name=\'{blockname}\']'):
         subels = e.iter()
         # find block with attributes
         next(subels)
