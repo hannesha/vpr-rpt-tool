@@ -25,12 +25,6 @@ def find(root: ElementTree.Element, blockname: str):
         return e
 
 def print_element(e: ElementTree.Element, port_name: str, src_loc: bool):
-    # print(e.items())
-    if src_loc:
-        for attr in e.iter('attribute'):
-            if attr.attrib['name'] == 'src':
-                yield f'src: {attr.text}'
-        # print(attr.tag, attr.attrib, attr.text)
 
     for se in e.iter('port'):
         if se.attrib['name'] == port_name:
@@ -43,6 +37,16 @@ def print_element(e: ElementTree.Element, port_name: str, src_loc: bool):
                 if port_name[0] == 'S':
                     new_port = 'O'
                 port_name = new_port + port_name[1:]
+
+    if src_loc:
+        for attr in e.iter('attribute'):
+            if attr.attrib['name'] == 'src':
+                yield 'source location:'
+                for loc in attr.text[1:-1].split('|'):
+                    # ignore techmap source locations
+                    # if '_map.v:' in loc:
+                    #     break
+                    yield '\t' + loc
 
 
 #%%
