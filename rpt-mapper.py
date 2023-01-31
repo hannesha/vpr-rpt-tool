@@ -11,7 +11,7 @@ signal_regex = re.compile('(\$.+)\.(.+)\[(\d+)\]')
 
 #%%
 
-@lru_cache
+@lru_cache(maxsize=200)
 def find(root: ElementTree.Element, blockname: str):
 
     for e in root.iterfind(f'.//block[@name=\'{blockname}\']'):
@@ -85,3 +85,7 @@ if __name__ == '__main__':
 
     with open(args.report_file) as rpt:
         process_file(rpt, root, args.src_loc)
+
+    cache_info = find.cache_info()
+    hit_ratio = cache_info.hits/(cache_info.hits + cache_info.misses)
+    print(f'#Cache stats: {cache_info}, hit ratio={hit_ratio*100:.2f}%')
